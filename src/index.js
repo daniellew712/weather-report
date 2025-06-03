@@ -1,5 +1,6 @@
 
 let temperature = 20;
+let isCelsius = true;
 
 const increaseButton = document.getElementById('increaseTempControl');
 const decreaseButton = document.getElementById('decreaseTempControl');
@@ -10,11 +11,12 @@ const landscape = document.getElementById('landscape');
 const skySelect = document.getElementById('skySelect');
 const sky = document.getElementById('sky');
 const currentTempButton = document.getElementById('currentTempButton');
+const convertTempButton = document.getElementById("convertTempButton");
 
 
 const updateTemprature = () => {
     // const Celsius = Math.round((temperature-32)*5/9);
-    tempValue.textContent = `${temperature}`
+    tempValue.textContent = isCelsius ? `${temperature}°C` : `${temperature}°F`;
     updateColorTemp(temperature);
     updateWeatherGarden(temperature);
 };
@@ -61,6 +63,22 @@ const updateSky = () => {
         sky.textContent = "🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨";
     }
 };
+
+const convertTemp = () => {
+  const temperatureHeader = document.getElementById('temperatureHeader');
+  if (isCelsius) {
+    temperature = Math.round(temperature * 9 / 5 + 32);
+    convertTempButton.textContent = "Convert to °C";
+    temperatureHeader.textContent = "Temperature (°F)";
+  } else {
+    temperature = Math.round((temperature - 32) * 5 / 9);
+    convertTempButton.textContent = "Convert to °F";
+    temperatureHeader.textContent = "Temperature (°C)";
+  }
+  isCelsius = !isCelsius;
+  updateTemprature();
+};
+
 // Add here: calling APIs
 currentTempButton.addEventListener('click', () => {
     axios.get('http://127.0.0.1:5000/location',{
@@ -106,3 +124,6 @@ updateTemprature();
 updateSky();
 cityNameInput.value = "Seattle";
 headerCityName.textContent = cityNameInput.value;
+
+
+convertTempButton.addEventListener("click", convertTemp);
