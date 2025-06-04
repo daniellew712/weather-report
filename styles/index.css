@@ -61,6 +61,25 @@ grid-row: 2;
     border-radius: 10px
 }
 
+.temperature__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.temperature__header button {
+    background-color: grey;
+    border: none;
+    color: blue;
+    display: inline-block;
+    font-size: 10px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 6px 10px; 
+}
+.temperature__header h2 {
+  margin: 0;
+}
+
 .sky__section {
 grid-row: 3;
 }
