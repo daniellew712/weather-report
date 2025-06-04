@@ -11,6 +11,7 @@ const landscape = document.getElementById('landscape');
 const skySelect = document.getElementById('skySelect');
 const sky = document.getElementById('sky');
 const currentTempButton = document.getElementById('currentTempButton');
+const transformTemp = document.getElementById('transformTemp');
 
 
 const updateTemprature = () => {
@@ -29,31 +30,59 @@ const updateTemprature = () => {
 const updateColorTemp = (temperature) => {
 
     tempValue.className = '';
-
-  if (temperature >= 27) {
-    tempValue.classList.add('red');
-  } else if (temperature >= 21) {
-    tempValue.classList.add('orange');
-  } else if (temperature >= 15) {
-    tempValue.classList.add('yellow');
-  } else if (temperature >= 10) {
-    tempValue.classList.add('green');
+  if (isCelsius) {
+      if (temperature >= 27) {
+      tempValue.classList.add('red');
+    } else if (temperature >= 21) {
+      tempValue.classList.add('orange');
+    } else if (temperature >= 15) {
+      tempValue.classList.add('yellow');
+    } else if (temperature >= 10) {
+      tempValue.classList.add('green');
+    } else {
+      tempValue.classList.add('teal');
+    }
   } else {
-    tempValue.classList.add('teal');
+    if (temperature >= 80) {
+      tempValue.classList.add('red');
+    } else if (temperature >= 70) {
+      tempValue.classList.add('orange');
+    } else if (temperature >= 60) {
+      tempValue.classList.add('yellow');
+    } else if (temperature >= 50) {
+      tempValue.classList.add('green');
+    } else {
+      tempValue.classList.add('teal');
+    }
   }
+
 };
 
 const updateWeatherGarden = (temperature) => {
-  if (temperature >= 27) {
-    landscape.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂";
-  } else if (temperature >= 21) {
-    landscape.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷";
-  } else if (temperature >= 15) {
-    landscape.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃";
-  } else if (temperature >= 10) {
-    landscape.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲";
+  if (isCelsius) {
+    if (temperature >= 27) {
+      landscape.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂";
+    } else if (temperature >= 21) {
+      landscape.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷";
+    } else if (temperature >= 15) {
+      landscape.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃";
+    } else if (temperature >= 10) {
+      landscape.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲";
+    } else {
+      landscape.textContent = "🌲🌲❄️❄️🐘❄️🌲❄️🌲";
+    }   
   } else {
-    landscape.textContent = "🌲🌲❄️❄️🐘❄️🌲❄️🌲";
+      if (temperature >= 80) {
+        landscape.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂";
+      } else if (temperature >= 70) {
+        landscape.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷";
+      } else if (temperature >= 60) {
+        landscape.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃";
+      } else if (temperature >= 50) {
+        landscape.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲";
+      } else {
+        landscape.textContent = "🌲🌲❄️❄️🐘❄️🌲❄️🌲";
+      }
   }
 };
 
@@ -99,8 +128,12 @@ currentTempButton.addEventListener('click', () => {
     .then ((response_weather) => {
         // console.log(response_weather);
         const kelvinTemperature = response_weather.data.main.temp;
-        // Celsius = Kelvin - 273.15
+        if (isCelsius) {
+          // Celsius = Kelvin - 273.15
         temperature = Math.round(kelvinTemperature - 273.15);
+        } else {
+          temperature = Math.round((kelvinTemperature - 273.15) * 9 / 5 + 32);
+        }
         updateTemprature();
     })
     .catch((error) => {
@@ -108,6 +141,16 @@ currentTempButton.addEventListener('click', () => {
     })
 });
 
+transformTemp.addEventListener ('click', () =>{
+  if (isCelsius) {
+    temperature = Math.round(temperature * 9 / 5 + 32);
+  } else {
+    temperature = Math.round((temperature - 32) * 5 / 9);
+  }
+  // update isCelsius
+  isCelsius = !isCelsius;
+  updateTemprature();
+});
 
 skySelect.addEventListener ('change', updateSky);
 cityNameReset.addEventListener ('click', () => {
