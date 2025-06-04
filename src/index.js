@@ -11,7 +11,6 @@ const landscape = document.getElementById('landscape');
 const skySelect = document.getElementById('skySelect');
 const sky = document.getElementById('sky');
 const currentTempButton = document.getElementById('currentTempButton');
-const convertTempButton = document.getElementById("convertTempButton");
 
 
 const updateTemprature = () => {
